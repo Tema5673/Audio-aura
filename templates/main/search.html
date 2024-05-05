@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная страница</title>
+    <link rel="stylesheet" href="static/css/main.css">
+</head>
+<body>
+    <div class="container">
+    <button class="personal-area-button" onclick="openPersonalArea()">
+        <img src="static/icons/1674365337_3-31.png" alt="Personal Area" class="personal-area-icon">
+        <span class="text">Профиль</span>
+    </button>
+    <button class="search-button">
+        <img src="static/icons/kisspng-computer-icons-clip-art-openclipart-magnifying-gla-5d31cfdb595331.9238955815635455633659.png" alt="Поиск" class="search-icon">
+        <span class="text">Поиск</span>
+    </button>
+</div>
+
+    <div id="itemsContainer">
+    <div class="item" id="item1" onclick="openItem('item1')">Item 1</div>
+    <div class="item" id="item2" onclick="openItem('item2')">Item 2</div>
+</div>
+
+    <div id="personalAreaContainer"></div>
+
+
+<script>
+    function openPersonalArea() {
+        window.location.href = '/personal_area';
+    }
+
+    function openItem(itemId) {
+        console.log("Opening item with ID: " + itemId);
+        // Add your logic to handle item opening here
+    }
+</script>
+
+
+
+</body>
+</html>

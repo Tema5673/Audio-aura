@@ -1,0 +1,525 @@
+/* Основные стили */
+body {
+    background: #333;
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    gap: 10px;
+}
+
+.button {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: transparent;
+    border: 3px solid springgreen;
+    border-radius: 1rem;
+    padding: 10px;
+    flex: 1;
+    margin: 0 5px;
+    max-width: 150px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0);
+    transition: transform 0.5s, box-shadow 0.5s;
+}
+
+.button:hover {
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+}
+
+.personal-area-icon {
+    width: 30px;
+    height: 30px;
+}
+
+.text {
+    margin-top: 5px;
+    font-weight: bold;
+    color: white;
+}
+
+/* Общие стили */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+    border: 0;
+    outline: 0;
+    text-transform: capitalize;
+}
+
+html {
+    font-size: 62.5%;
+    overflow-x: hidden;
+}
+
+/* Меню */
+#menu {
+    visibility: hidden;
+}
+
+label {
+    font-size: 2rem;
+    background-color: springgreen;
+    color: #fff;
+    border-radius: 5rem;
+    width: 5rem;
+    height: 5rem;
+    text-align: center;
+    line-height: 5rem;
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    box-shadow: 0 0 10px 5px springgreen;
+    z-index: 999;
+    cursor: pointer;
+}
+
+label .fa-times {
+    text-align: center;
+    line-height: 5rem;
+    display: none;
+}
+
+.navbar {
+    background-color: #333;
+    position: fixed;
+    top: 2.5rem;
+    right: 2.5rem;
+    border: .1rem solid springgreen;
+    padding: 1rem 4rem 1rem 2rem;
+    border-radius: 1rem;
+    z-index: 1;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .8);
+    opacity: 0;
+    transform-origin: top right;
+    transform: scale(0);
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.navbar ul li a {
+    display: block;
+    font-size: 1.7rem;
+    padding: 1rem 5rem 1rem 0rem;
+    color: #fff;
+    transition: 0.3s;
+}
+
+.navbar ul li a:hover {
+    color: springgreen;
+    transform: translateX(8rem);
+}
+
+#menu:checked ~ .navbar {
+    opacity: 1;
+    transform: scale(1);
+}
+
+#menu:checked ~ label .fa-bars {
+    display: none;
+}
+
+#menu:checked ~ label .fa-times {
+    display: block;
+}
+
+#menu:checked + label {
+    background-color: #ff0000;
+    box-shadow: 0 0 10px 5px orange;
+}
+
+/* Аватар и информация о пользователе */
+.avatar {
+    width: 100px;
+    height: 100px;
+    border: 3px solid springgreen;
+    border-radius: 1rem;
+    position: fixed;
+    top: calc(2rem + 50px);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: -1;
+}
+
+.user {
+    position: fixed;
+    top: calc(2rem + 50px + 100px + 2rem);
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    font-size: 2rem;
+}
+
+/* Меню-контейнер */
+.menu-container {
+    visibility: hidden;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 250px;
+    height: 300px;
+    border-radius: 10px;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .8);
+    border: .1rem solid springgreen;
+    background: #333;
+    z-index: 0;
+    padding: 20px;
+    gap: 10px 20px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.menu-container .menu-item {
+    border: 3px solid gray;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-container .menu-item .inner {
+    border: 2px solid springgreen;
+    border-radius: 20px;
+    width: 50px;
+    height: 50px;
+}
+
+/* Контент меню */
+.menu-content {
+    padding: 20px;
+    color: #fff;
+}
+
+/* Кнопка закрытия */
+.close-btn {
+    font-size: 2rem;
+    background-color: #ff0000;
+    color: #fff;
+    border-radius: 5rem;
+    width: 5rem;
+    height: 5rem;
+    text-align: center;
+    line-height: 5rem;
+    position: fixed;
+    top: -10px;
+    right: -10px;
+    box-shadow: 0 0 10px 5px #ff4d00;
+    z-index: 999;
+    cursor: pointer;
+}
+
+/* Меню авторизации */
+.login-menu {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 360px;
+    background-color: #222;
+    color: #fff;
+    border-radius: 5rem;
+    padding: 20px;
+}
+
+.login-menu.active {
+    display: block;
+}
+
+/* Элементы внутри меню авторизации */
+.login-menu .login {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+    border-radius: 5rem;
+    position: relative;
+}
+
+.login-menu .login .login-text {
+    flex-grow: 1;
+    font-weight: bold;
+    transition: transform 0.3s ease;
+}
+
+.login-menu .login span {
+    font-size: 1.5rem;
+    padding: 10px;
+    margin-right: 25px;
+    margin-left: 25px;
+    font-weight: bold;
+}
+
+/* Индикатор */
+.login-menu .login .indicator {
+    width: 50%;
+    height: 100%;
+    background-color: #00fffc;
+    border-radius: 5rem;
+    position: absolute;
+    top: 0;
+    z-index: -1;
+    left: 0;
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+    pointer-events: none;
+}
+
+.login-menu .login .indicator.move-to-sign-in {
+    transition: transform 0.5s ease;
+    transform: translateX(0%);
+}
+
+.login-menu .login .indicator.move-to-sign-up {
+    transition: transform 0.5s ease;
+    transform: translateX(100%);
+}
+
+.login-icon {
+    position: fixed;
+    top: 10px;
+    left: -10px;
+    z-index: 9999;
+    cursor: pointer;
+    width: 50px; /* Уменьшаем ширину */
+    height: 25px; /* Уменьшаем высоту */
+    background-size: cover;
+    transition: none; /* Отключаем анимацию при наведении */
+}
+
+.login-icon img {
+    width: 50px; /* Уменьшаем ширину изображения */
+    height: auto; /* Поддерживаем пропорции по высоте */
+}
+
+
+/* Центральный элемент */
+.login-menu .center-element {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 250px;
+    height: 40px;
+    background-color: #333333;
+    border-radius: 10px;
+    border: .1rem solid springgreen;
+}
+
+/* Элемент ввода email */
+.border-element {
+    position: absolute;
+    left: 25px;
+    top: 80px;
+    border: 2px solid springgreen;
+    width: 250px;
+    height: 40px;
+    border-radius: 2rem;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.email-label {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+
+.input-text {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 75%;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 5px 10px;
+    font-size: 16px;
+    transition: opacity 0.3s ease;
+}
+
+.border-element:hover .email-label {
+    transform: translateY(-120%) scale(0.8);
+}
+
+.border-element:hover .input-text {
+    opacity: 1;
+    font-weight: bold;
+    color: white;
+}
+
+.warning-text {
+    font-weight: bold;
+    font-size: 10px;
+    color: red;
+    position: absolute;
+    top: 85px;
+    left: 160px;
+    display: none;
+}
+
+.input-text::-webkit-input-placeholder {
+    color: transparent;
+}
+
+.input-text:-moz-placeholder {
+    color: transparent;
+}
+
+.input-text::-moz-placeholder {
+    color: transparent;
+}
+
+.input-text:-ms-input-placeholder {
+    color: transparent;
+}
+
+/* Элемент ввода пароля */
+.password-label {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+
+.password-element {
+    left: 25px;
+    top: 140px;
+    border: 2px solid springgreen;
+    width: 250px;
+    height: 40px;
+    border-radius: 2rem;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    position: absolute;
+}
+
+.password-element:hover .password-label {
+    transform: translateY(-120%) scale(0.8);
+}
+
+
+.password-toggle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.eyes {
+  position: fixed;
+  height: 25px;
+  width: 25px;
+  left: 235px;
+  display: none; /* изначально скрыто */
+}
+
+.closed-eyes {
+  position: fixed;
+  height: 25px;
+  width: 25px;
+  left: 235px;
+  display: block; /* изначально активно */
+}
+
+
+
+
+.button-continue {
+  border: 2px solid darkgray; /* Задаем границу с более темным цветом */
+  border-radius: 2rem;
+  top: 320px;
+  height: 30px;
+  width: 110px;
+  right: 100px;
+  position: fixed;
+  background-color: rgba(128, 128, 128, 0.8); /* Используем RGBA для определения цвета с прозрачностью */
+  color: white;
+  font-weight: bold;
+  transition: all 0.3s ease; /* Добавляем плавность при движении */
+}
+
+.button-continue:hover {
+  transform: scale(0.9); /* Уменьшаем размер кнопки при наведении */
+}
+
+.button-continue:active {
+  transform: scale(1); /* Возвращаем кнопку в исходный размер при отводе */
+}
+
+
+
+.password-confirm-element {
+    margin-top: 120px; /* чтобы разделить его от предыдущего элемента */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    border: 2px solid springgreen;
+    border-radius: 2rem;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    position: absolute;
+}
+
+.password-confirm-label {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+
+/* Стили для эффекта при наведении */
+.password-confirm-element:hover .password-confirm-label {
+    transform: translateY(-120%) scale(0.8);
+}
+
+/* Стили для переключателя пароля */
+.password-toggle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.confirm-eyes {
+  position: fixed;
+  height: 25px;
+  width: 25px;
+  left: 235px;
+  display: none; /* изначально скрыто */
+}
+
+.confirm-closed-eyes {
+  position: fixed;
+  height: 25px;
+  width: 25px;
+  left: 235px;
+  display: block; /* изначально активно */
+}

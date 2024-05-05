@@ -1,0 +1,116 @@
+body {
+    background: #333 !important;
+}
+
+.container {
+    display: flex;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    gap: 10px;
+}
+
+.personal-area-button {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: transparent;
+    border: 3px solid springgreen;
+    border-radius: 1rem;
+    padding: 10px;
+    flex: 1;
+    margin: 0 5px;
+    max-width: 150px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0);
+    transition: transform 0.5s, box-shadow 0.5s;
+}
+
+.personal-area-button:hover {
+    transform: scale(0.9);
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+}
+
+.personal-area-icon {
+    width: 30px;
+    height: 30px;
+}
+
+.search-button {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: transparent;
+    border: 3px solid springgreen;
+    border-radius: 1rem;
+    padding: 10px;
+    flex: 1;
+    margin: 0 5px;
+    max-width: 150px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0);
+    transition: transform 0.5s, box-shadow 0.5s;
+}
+
+.search-button:hover {
+    transform: scale(0.9);
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+}
+
+.search-icon {
+    width: 30px;
+    height: 30px;
+}
+
+.text {
+    margin-top: 5px;
+    font-weight: bold;
+    color: white;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#itemsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Выравнивание элементов по центру по вертикали */
+    margin-top: 20px;
+}
+
+.item {
+    width: 250px;
+    height: 40px;
+    border: 2px solid #4CAF50;
+    background-color: #555555; /* Светло-серый цвет фона */
+    text-align: center;
+    line-height: 40px;
+    cursor: pointer;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    border-radius: 1rem; /* Радиус границы 1rem */
+    color: white; /* Цвет текста */
+    font-weight: bold; /* Жирный текст */
+    position: relative; /* Для использования псевдоэлемента */
+}
+
+.item:before {
+    content: ''; /* Контент псевдоэлемента */
+    position: absolute; /* Абсолютное позиционирование */
+    top: -2px; /* Смещение псевдоэлемента вверх */
+    left: -2px; /* Смещение псевдоэлемента влево */
+    width: calc(100% + 4px); /* Ширина псевдоэлемента с учетом границ */
+    height: calc(100% + 4px); /* Высота псевдоэлемента с учетом границ */
+    border-radius: 1rem; /* Радиус границы псевдоэлемента */
+}
+
+.item:last-child {
+    margin-bottom: 0; /* Убираем отступ снизу у последнего элемента */
+}
