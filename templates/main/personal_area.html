@@ -3,10 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Личный кабинет</title>
-    <link rel="stylesheet" href="static/css/main.css">
-    <link rel="stylesheet" href="static/css/personal_area.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/personal_area.css') }}">
+
 </head>
+<body>
+<div class="top-bar">
+    <div class="user-avatar">
+        <img src="{{ url_for('static', filename='path_to_avatar.jpg') }}" class="avatar-img">
+        <span class="username">Пользователь</span>
+    </div>
+</div>
+
+<div class="auth-buttons">
+    <button onclick="showRegisterForm()">Зарегистрироваться</button>
+    <button onclick="showLoginForm()">Войти</button>
+</div>
+
+<div id="register-form" class="auth-form">
+    <h2>Регистрация</h2>
+    <form action="{{ url_for('register') }}" method="post">
+        <label for="register-username"></label>
+        <input type="text" id="register-username" name="username" placeholder="Логин" required>
+        <label for="register-password"></label>
+        <input type="password" id="register-password" name="password" placeholder="Пароль" required>
+        <label for="register-confirm-password"></label>
+        <input type="password" id="register-confirm-password" name="confirm-password" placeholder="Подтвердите пароль" required>
+        <button type="submit">Продолжить</button>
+    </form>
+</div>
+
+<div id="login-form" class="auth-form">
+    <h2>Вход</h2>
+    <form action="{{ url_for('login') }}" method="post">
+        <label for="login-username"></label>
+        <input type="text" id="login-username" name="username" placeholder="Логин" required>
+        <label for="login-password"></label>
+        <input type="password" id="login-password" name="password" placeholder="Пароль" required>
+        <button type="submit">Продолжить</button>
+    </form>
+</div>
+
+<div class="container">
+    <button class="personal-area-button">
+        <img src="{{ url_for('static', filename='icons/1674365337_3-31.png') }}" class="personal-area-icon">
+        <span class="text">Профиль</span>
+    </button>
+    <button class="search-button" onclick="openSearch()">
+        <img src="{{ url_for('static', filename='icons/kisspng-computer-icons-clip-art-openclipart-magnifying-gla-5d31cfdb595331.9238955815635455633659.png') }}" class="search-icon">
+        <span class="text">Поиск</span>
+    </button>
+</div>
+
+<script>
+    function openSearch() {
+        window.location.href = '/';
+    }
+
+    function showRegisterForm() {
+        document.getElementById('register-form').style.display = 'block';
+        document.getElementById('login-form').style.display = 'none';
+    }
+
+    function showLoginForm() {
+        document.getElementById('register-form').style.display = 'none';
+        document.getElementById('login-form').style.display = 'block';
+    }
+</script>
 
 </body>
 </html>

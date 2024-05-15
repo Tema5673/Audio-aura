@@ -12,21 +12,95 @@ body {
     gap: 10px;
 }
 
+.container::before {
+    content: ''; /* добавляем содержимое для псевдоэлемента */
+    position: absolute; /* устанавливаем позицию абсолютную относительно контейнера */
+    top: 0; /* прикрепляем псевдоэлемент к верхней границе контейнера */
+    left: 0; /* прикрепляем псевдоэлемент к левой границе контейнера */
+    width: 100%; /* задаем ширину псевдоэлемента равной ширине контейнера */
+    height: 125%; /* высота добавляемого фона снизу */
+    z-index: -1; /* устанавливаем z-index, чтобы псевдоэлемент был под остальным контентом */
+    bottom: -20px; /* увеличиваем отступ снизу на 20px (можете изменить на нужное значение) */
+}
+
+.music-controls {
+    position: fixed;
+    top: 570px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 100%;
+    height: 20px;
+    max-width: 355px; /* Максимальная ширина для музыкальных контролов */
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background-color: #gray;
+    padding: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    border: 3px solid #222;
+}
+
+.slider-container {
+    flex: 1;
+    margin: 0 auto;
+    width: 300px;
+}
+
+#timeSlider {
+    position: absolute;
+    top: 10px; /* Расстояние от верхнего края контейнера */
+    left: 50%; /* Расстояние от левого края контейнера */
+    transform: translateX(-50%);
+    width: 250px;
+    background-color: #333; /* Цвет фона слайдера */
+}
+
+#timeSlider::-webkit-slider-thumb {
+    background-color: #00FF00; /* Ярко зеленый цвет для ползунка */
+}
+
+.play-button,
+.pause-button {
+    position: absolute;
+    margin-left: 5px; /* Размещаем справа */
+    margin-top: auto; /* Размещаем по вертикали внизу */
+    background: #333;
+    color: #00FF00;
+}
+
+.volume-controls {
+    margin-left: auto; /* Помещаем вправо */
+}
+
+.mute-button {
+    position: absolute; /* Устанавливаем позицию кнопки как абсолютную */
+    left: 330px; /* Отступ от левого края контейнера */
+    top: 8px; /* Отступ от верхнего края контейнера */
+    background: #333;
+    color: #00FF00;
+}
+
+
+
+
+
 .personal-area-button {
-    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     background-color: transparent;
     border: 3px solid springgreen;
     border-radius: 1rem;
-    padding: 10px;
-    flex: 1;
-    margin: 0 5px;
-    max-width: 150px;
+    width: 150px;
+    height: 80px; /* Уменьшенная высота кнопок */
     overflow: hidden;
     box-shadow: 0 0 15px rgba(0, 255, 0, 0);
     transition: transform 0.5s, box-shadow 0.5s;
+    margin-left: -200px;
+    margin-top: -80px;
+    position: absolute;
 }
 
 .personal-area-button:hover {
@@ -40,20 +114,21 @@ body {
 }
 
 .search-button {
-    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     background-color: transparent;
     border: 3px solid springgreen;
     border-radius: 1rem;
-    padding: 10px;
-    flex: 1;
-    margin: 0 5px;
-    max-width: 150px;
+    width: 150px;
+    height: 80px; /* Уменьшенная высота кнопок */
     overflow: hidden;
     box-shadow: 0 0 15px rgba(0, 255, 0, 0);
     transition: transform 0.5s, box-shadow 0.5s;
+    margin-left: 200px;
+    margin-top: -80px;
+    position: absolute;
 }
 
 .search-button:hover {
@@ -72,45 +147,202 @@ body {
     color: white;
 }
 
-.container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
 #itemsContainer {
     display: flex;
-    flex-direction: column;
-    align-items: center; /* Выравнивание элементов по центру по вертикали */
-    margin-top: 20px;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 .item {
-    width: 250px;
-    height: 40px;
-    border: 2px solid #4CAF50;
-    background-color: #555555; /* Светло-серый цвет фона */
+    width: 355px;
+    height: 55px;
+    border: 2px solid springgreen;
+    background-color: #555555;
     text-align: center;
     line-height: 40px;
     cursor: pointer;
     box-sizing: border-box;
-    margin-bottom: 10px;
-    border-radius: 1rem; /* Радиус границы 1rem */
-    color: white; /* Цвет текста */
-    font-weight: bold; /* Жирный текст */
-    position: relative; /* Для использования псевдоэлемента */
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    position: relative;
 }
 
-.item:before {
-    content: ''; /* Контент псевдоэлемента */
-    position: absolute; /* Абсолютное позиционирование */
-    top: -2px; /* Смещение псевдоэлемента вверх */
-    left: -2px; /* Смещение псевдоэлемента влево */
-    width: calc(100% + 4px); /* Ширина псевдоэлемента с учетом границ */
-    height: calc(100% + 4px); /* Высота псевдоэлемента с учетом границ */
-    border-radius: 1rem; /* Радиус границы псевдоэлемента */
+
+#image1 {
+    border-radius: 5px;
+    width: 55px; /* Ширина изображения */
+    height: 52px; /* Высота изображения */
+    margin-right: 296px; /* Сдвигаем изображение влево */
 }
 
-.item:last-child {
-    margin-bottom: 0; /* Убираем отступ снизу у последнего элемента */
+#image2 {
+    border-radius: 5px;
+    width: 55px; /* Ширина изображения */
+    height: 52px; /* Высота изображения */
+    margin-right: 296px; /* Сдвигаем изображение влево */
+    /* другие стили, если необходимо */
+}
+
+
+
+#item1 {
+    position: relative;
+    margin-bottom: 20px;
+    margin-top: -280px;
+}
+
+.download-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20px; /* Ширина иконки скачивания */
+    height: auto; /* Автоматический расчет высоты, основываясь на пропорциях */
+    cursor: pointer; /* Изменение курсора при наведении */
+}
+
+#item1 .song-name {
+    font-weight: bold;
+    color: white;
+    margin-top: -75px; /* Этот отрицательный отступ может привести к непредсказуемым результатам */
+    margin-left: -130px; /* Этот отрицательный отступ может привести к непредсказуемым результатам */
+    z-index: 2; /* Неправильное свойство - заменим на position: relative; у элемента #item1 */
+    position: relative; /* Добавим позиционирование, чтобы можно было использовать относительное позиционирование для вложенных элементов */
+}
+
+#item1 .artist-name {
+    color: #c0c0c0;
+    margin-top: -30px; /* Этот отрицательный отступ может привести к непредсказуемым результатам */
+    margin-left: -176px; /* Этот отрицательный отступ может привести к непредсказуемым результатам */
+    z-index: 2; /* Неправильное свойство - заменим на position: relative; у элемента #item1 */
+    position: relative; /* Добавим позиционирование, чтобы можно было использовать относительное позиционирование для вложенных элементов */
+    font-size: 12px; /* Установка размера шрифта на 12 пикселей */
+}
+
+
+
+
+#item2 {
+    position: absolute;
+    top: calc(50% - 100px); /* Выравниваем item2 по центру вертикали относительно item1 */
+    margin-top: 20px;
+}
+
+
+.popular-container {
+    position: absolute;
+    top: 100px; /* Размещаем блок вверху страницы */
+    left: 50%; /* Размещаем блок по центру горизонтально */
+    transform: translateX(-50%); /* Сдвигаем блок влево на половину его ширины */
+    z-index: 999; /* Устанавливаем высокий уровень z-index, чтобы кнопка была наверху */
+}
+
+.popular-container #popularButton {
+    display: flex;
+    width: 140px;
+    height: 45px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: transparent;
+    border: 3px solid springgreen;
+    border-radius: 10px;
+    padding: 10px;
+    max-width: 150px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0);
+    transition: transform 0.5s, box-shadow 0.5s;
+    font-weight: bold;
+    color: white;
+}
+
+#popularButton .text {
+    margin-top: 0;
+    margin-bottom: 0;
+    text-align: center;
+    font-weight: bold;
+}
+
+#popularButton:hover {
+    transform: scale(0.9);
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+}
+
+.popular-container #new {
+    margin-top: 10px;
+    display: flex;
+    width: 140px;
+    height: 45px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: transparent;
+    border: 3px solid springgreen;
+    border-radius: 10px;
+    padding: 10px;
+    max-width: 150px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0);
+    transition: transform 0.5s, box-shadow 0.5s;
+    font-weight: bold;
+    color: white;
+}
+
+#new .text {
+    margin-top: 0;
+    margin-bottom: 0;
+    text-align: center;
+    font-weight: bold;
+}
+
+#new:hover {
+    transform: scale(0.9);
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+}
+
+#itemsContainer .download-icon {
+    position: absolute;
+    z-index: 999; /* Устанавливаем высокий уровень z-index, чтобы кнопка была наверху */
+    height: 30px;
+    width: 30px;
+    margin-top: 10px;
+}
+
+.search-bar {
+    background-color: #666;
+    color: #fff;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    width: 65%; /* Уменьшаем ширину */
+    margin: 0 auto; /* Центрируем */
+    height: 30px; /* Уменьшаем высоту */
+}
+
+.search-input {
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    color: #fff;
+    padding: 10px; /* Увеличиваем внутренние отступы для увеличения высоты */
+    margin-right: 5px; /* Добавляем немного отступа справа */
+    height: 18px; /* Устанавливаем высоту поля ввода */
+    border-width: 0; /* Устанавливаем ширину границы в 0, чтобы гарантировать отсутствие границ */
+    outline: none; /* Убираем контур фокуса при клике на поле ввода */
+
+}
+
+.search-icon {
+    cursor: pointer;
+    margin-top: 12.5px; /* Отступ сверху */
+    margin-left: 10px;
+}
+
+.search-icon:hover {
+    color: #ddd; /* Изменяем цвет иконки при наведении */
+}
+
+.search-input::placeholder {
+    color: #fff; /* Цвет плейсхолдера */
 }
