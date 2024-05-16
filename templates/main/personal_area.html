@@ -112,6 +112,7 @@
                 document.getElementById('register-form').style.display = 'none';
                 document.getElementById('auth-buttons').style.display = 'none';
                 document.getElementById('logout-btn').style.display = 'block'; // Показываем кнопку "Выйти из аккаунта"
+                document.querySelector('.username').textContent = currentUsername; // Обновляем имя пользователя
                 alert('Регистрация прошла успешно!');
             } else {
                 document.getElementById('register-error').textContent = 'Пользователь с таким логином уже существует'; // Выводим ошибку
