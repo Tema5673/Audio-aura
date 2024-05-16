@@ -31,17 +31,19 @@
         <label for="register-confirm-password"></label>
         <input type="password" id="register-confirm-password" name="confirm-password" placeholder="Подтвердите пароль" required>
         <button type="submit">Продолжить</button>
+        <span id="register-error" style="color: red;"></span> <!-- Показывает ошибку при регистрации -->
     </form>
 </div>
 
 <div id="login-form" class="auth-form" style="display:none;">
     <h2>Вход</h2>
-    <form action="{{ url_for('login') }}" method="post">
+    <form id="login-form-element">
         <label for="login-username"></label>
         <input type="text" id="login-username" name="username" placeholder="Логин" required>
         <label for="login-password"></label>
         <input type="password" id="login-password" name="password" placeholder="Пароль" required>
         <button type="submit">Продолжить</button>
+        <span id="login-error" style="color: red;"></span> <!-- Показывает ошибку при входе -->
     </form>
 </div>
 
@@ -81,6 +83,11 @@
         document.getElementById('logout-btn').style.display = 'none'; // Скрытие кнопки "Выйти из аккаунта"
     }
 
+    // Функция для скрытия сообщения об ошибке через 5 секунд
+    function hideErrorMessage() {
+        document.getElementById('register-error').style.display = 'none';
+    }
+
     document.getElementById('register-form-element').addEventListener('submit', function(event) {
         event.preventDefault();
 
@@ -98,7 +105,8 @@
                 document.getElementById('logout-btn').style.display = 'block'; // Показываем кнопку "Выйти из аккаунта"
                 alert('Регистрация прошла успешно!');
             } else {
-                alert('Ошибка регистрации. Попробуйте снова.');
+                document.getElementById('register-error').textContent = 'Пользователь с таким логином уже существует'; // Выводим ошибку
+                setTimeout(hideErrorMessage, 5000); // Скрыть сообщение об ошибке через 5 секунд
             }
         })
         .catch(error => console.error('Error:', error));

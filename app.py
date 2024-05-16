@@ -41,9 +41,15 @@ def register():
     password = request.form['password']
     confirm_password = request.form['confirm-password']
 
+    # Проверка наличия пользователя с таким именем
+    existing_user = User.query.filter_by(username=username).first()
+    if existing_user:
+        flash('Пользователь с таким логином уже существует!', 'error')
+        return jsonify({'status': 'error'}), 409
+
     if password != confirm_password:
         flash('Пароли не совпадают!', 'error')
-        return redirect(url_for('personal_area'))
+        return jsonify({'status': 'error'}), 400
 
     new_user = User(username=username, password=password, tags='Registered User')
     db.session.add(new_user)
@@ -51,6 +57,7 @@ def register():
     flash('Регистрация прошла успешно!', 'success')
 
     return jsonify({'status': 'success'}), 200
+
 
 
 @app.route('/login', methods=['POST'])
