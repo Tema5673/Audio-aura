@@ -91,6 +91,12 @@
     var previousUsername = ""; // Переменная для хранения предыдущего значения логина
     var errorMessageShown = false; // Переменная для отслеживания отображения сообщения об ошибке
 
+    function logout() {
+        document.querySelector('.username').textContent = 'Пользователь'; // Сбрасываем имя пользователя на "Пользователь"
+        document.getElementById('logout-btn').style.display = 'none'; // Скрываем кнопку "Выйти из аккаунта"
+        document.getElementById('auth-buttons').style.display = 'block'; // Показываем кнопки "Зарегистрироваться" и "Войти"
+    }
+
     document.getElementById('register-form-element').addEventListener('submit', function(event) {
         event.preventDefault();
 
