@@ -1,3 +1,5 @@
+# Python код
+
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -63,6 +65,13 @@ def login():
     else:
         flash('Неверный логин или пароль!', 'error')
         return redirect(url_for('personal_area'))
+
+
+@app.route('/logout')
+def logout():
+    # Логика выхода из аккаунта (например, удаление сессионных данных)
+
+    return redirect(url_for('index'))
 
 
 if __name__ == '__main__':

@@ -13,6 +13,7 @@
         <img src="{{ url_for('static', filename='path_to_avatar.jpg') }}" class="avatar-img">
         <span class="username">Пользователь</span>
     </div>
+    <button onclick="logout()" id="logout-btn" style="display:none;">Выйти из аккаунта</button>
 </div>
 
 <div class="auth-buttons" id="auth-buttons">
@@ -70,6 +71,16 @@
         document.getElementById('login-form').style.display = 'block';
     }
 
+    function logout() {
+        // Логика выхода из аккаунта
+
+        // Изменение отображения элементов
+        document.getElementById('auth-buttons').style.display = 'block';
+        document.getElementById('register-form').style.display = 'none';
+        document.getElementById('login-form').style.display = 'none';
+        document.getElementById('logout-btn').style.display = 'none'; // Скрытие кнопки "Выйти из аккаунта"
+    }
+
     document.getElementById('register-form-element').addEventListener('submit', function(event) {
         event.preventDefault();
 
@@ -84,6 +95,7 @@
             if (data.status === 'success') {
                 document.getElementById('register-form').style.display = 'none';
                 document.getElementById('auth-buttons').style.display = 'none';
+                document.getElementById('logout-btn').style.display = 'block'; // Показываем кнопку "Выйти из аккаунта"
                 alert('Регистрация прошла успешно!');
             } else {
                 alert('Ошибка регистрации. Попробуйте снова.');
