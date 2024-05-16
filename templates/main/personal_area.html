@@ -6,7 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Личный кабинет</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/personal_area.css') }}">
-
 </head>
 <body>
 <div class="top-bar">
@@ -16,14 +15,14 @@
     </div>
 </div>
 
-<div class="auth-buttons">
+<div class="auth-buttons" id="auth-buttons">
     <button onclick="showRegisterForm()">Зарегистрироваться</button>
     <button onclick="showLoginForm()">Войти</button>
 </div>
 
-<div id="register-form" class="auth-form">
+<div id="register-form" class="auth-form" style="display:none;">
     <h2>Регистрация</h2>
-    <form action="{{ url_for('register') }}" method="post">
+    <form id="register-form-element">
         <label for="register-username"></label>
         <input type="text" id="register-username" name="username" placeholder="Логин" required>
         <label for="register-password"></label>
@@ -34,7 +33,7 @@
     </form>
 </div>
 
-<div id="login-form" class="auth-form">
+<div id="login-form" class="auth-form" style="display:none;">
     <h2>Вход</h2>
     <form action="{{ url_for('login') }}" method="post">
         <label for="login-username"></label>
@@ -70,6 +69,28 @@
         document.getElementById('register-form').style.display = 'none';
         document.getElementById('login-form').style.display = 'block';
     }
+
+    document.getElementById('register-form-element').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        var formData = new FormData(this);
+
+        fetch('{{ url_for("register") }}', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                document.getElementById('register-form').style.display = 'none';
+                document.getElementById('auth-buttons').style.display = 'none';
+                alert('Регистрация прошла успешно!');
+            } else {
+                alert('Ошибка регистрации. Попробуйте снова.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
 </script>
 
 </body>

@@ -1,12 +1,21 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
-from models import db, User
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'Pantera55285'
 
-db.init_app(app)
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)  # Initialize Flask-Migrate
+
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(150), unique=True, nullable=False)
+    password = db.Column(db.String(150), nullable=False)
+    tags = db.Column(db.String(150), nullable=True)  # Ensure this line is present
 
 
 def create_tables():
@@ -34,11 +43,12 @@ def register():
         flash('Пароли не совпадают!', 'error')
         return redirect(url_for('personal_area'))
 
-    new_user = User(username=username, password=password)
+    new_user = User(username=username, password=password, tags='Registered User')
     db.session.add(new_user)
     db.session.commit()
     flash('Регистрация прошла успешно!', 'success')
-    return redirect(url_for('personal_area'))
+
+    return jsonify({'status': 'success'}), 200
 
 
 @app.route('/login', methods=['POST'])
