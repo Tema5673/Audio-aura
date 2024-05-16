@@ -88,6 +88,8 @@
         document.getElementById('register-error').style.display = 'none';
     }
 
+    var errorMessageShown = false; // Переменная для отслеживания отображения сообщения об ошибке
+
     document.getElementById('register-form-element').addEventListener('submit', function(event) {
         event.preventDefault();
 
@@ -105,8 +107,12 @@
                 document.getElementById('logout-btn').style.display = 'block'; // Показываем кнопку "Выйти из аккаунта"
                 alert('Регистрация прошла успешно!');
             } else {
-                document.getElementById('register-error').textContent = 'Пользователь с таким логином уже существует'; // Выводим ошибку
-                setTimeout(hideErrorMessage, 5000); // Скрыть сообщение об ошибке через 5 секунд
+                if (!errorMessageShown) { // Проверяем, было ли уже отображено сообщение об ошибке
+                    document.getElementById('register-error').textContent = 'Пользователь с таким логином уже существует'; // Выводим ошибку
+                    document.getElementById('register-error').style.display = 'block'; // Показываем сообщение об ошибке
+                    setTimeout(hideErrorMessage, 5000); // Скрыть сообщение об ошибке через 5 секунд
+                    errorMessageShown = true; // Устанавливаем значение, указывающее на то, что сообщение об ошибке было показано
+                }
             }
         })
         .catch(error => console.error('Error:', error));
