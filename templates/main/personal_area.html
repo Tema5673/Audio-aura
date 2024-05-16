@@ -128,6 +128,19 @@
     document.getElementById('register-username').addEventListener('input', function() {
         errorMessageShown = false;
     });
+
+    // Проверяем текущий логин при повторном нажатии кнопки "Продолжить" и отображаем сообщение об ошибке при необходимости
+    document.getElementById('register-form-element').addEventListener('submit', function(event) {
+        var formData = new FormData(this);
+        var currentUsername = formData.get('username');
+
+        if (currentUsername === previousUsername && errorMessageShown) {
+            event.preventDefault(); // Отменяем отправку формы
+            document.getElementById('register-error').textContent = 'Пользователь с таким логином уже существует';
+            document.getElementById('register-error').style.display = 'block';
+            setTimeout(hideErrorMessage, 5000); // Скрыть сообщение об ошибке через 5 секунд
+        }
+    });
 </script>
 
 </body>
