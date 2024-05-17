@@ -1,223 +1,63 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Личный кабинет</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/personal_area.css') }}">
+    <title>Clicker</title>
     <style>
-        .error-icon {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: red;
-            font-size: 18px;
-            display: none;
+        body {
+            background-color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            flex-direction: column;
         }
-        .input-wrapper {
-            position: relative;
+        #clicker {
+            width: 100px;
+            height: 100px;
+            background-color: #fff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-<div class="top-bar">
-    <div class="user-avatar">
-        <img src="{{ url_for('static', filename='path_to_avatar.jpg') }}" class="avatar-img">
-        <span class="username">Пользователь</span>
-    </div>
-    <button onclick="logout()" id="logout-btn" style="display:none;">Выйти из аккаунта</button>
-</div>
+    <div id="score">Score: 0</div>
+    <div id="clicker" onclick="handleClick(event)">Click Me</div>
+    <script>
+        let score = 0;
 
-<div class="auth-buttons" id="auth-buttons">
-    <button onclick="showRegisterForm()">Зарегистрироваться</button>
-    <button onclick="showLoginForm()">Войти</button>
-</div>
-
-<div id="register-form" class="auth-form" style="display:none;">
-    <h2>Регистрация</h2>
-    <form id="register-form-element">
-        <div class="input-wrapper">
-            <label for="register-username"></label>
-            <input type="text" id="register-username" name="username" placeholder="Логин" required>
-            <span class="error-icon" id="username-error-icon">!</span>
-        </div>
-        <div class="input-wrapper">
-            <label for="register-password"></label>
-            <input type="password" id="register-password" name="password" placeholder="Пароль" required>
-            <span class="error-icon" id="password-error-icon">!</span>
-        </div>
-        <div class="input-wrapper">
-            <label for="register-confirm-password"></label>
-            <input type="password" id="register-confirm-password" name="confirm-password" placeholder="Подтвердите пароль" required>
-            <span class="error-icon" id="confirm-password-error-icon">!</span>
-        </div>
-        <button type="submit">Продолжить</button>
-        <span id="register-error" style="color: red; display: none;"></span> <!-- Показывает ошибку при регистрации -->
-    </form>
-</div>
-
-<div id="login-form" class="auth-form" style="display:none;">
-    <h2>Вход</h2>
-    <form id="login-form-element">
-        <div class="input-wrapper">
-            <label for="login-username"></label>
-            <input type="text" id="login-username" name="username" placeholder="Логин" required>
-            <span class="error-icon" id="login-username-error-icon">!</span>
-        </div>
-        <div class="input-wrapper">
-            <label for="login-password"></label>
-            <input type="password" id="login-password" name="password" placeholder="Пароль" required>
-            <span class="error-icon" id="login-password-error-icon">!</span>
-        </div>
-        <button type="submit">Продолжить</button>
-        <span id="login-error" style="color: red; display: none;"></span> <!-- Показывает ошибку при входе -->
-    </form>
-</div>
-
-<div class="container">
-    <button class="personal-area-button">
-        <img src="{{ url_for('static', filename='icons/1674365337_3-31.png') }}" class="personal-area-icon">
-        <span class="text">Профиль</span>
-    </button>
-    <button class="search-button" onclick="openSearch()">
-        <img src="{{ url_for('static', filename='icons/kisspng-computer-icons-clip-art-openclipart-magnifying-gla-5d31cfdb595331.9238955815635455633659.png') }}" class="search-icon">
-        <span class="text">Поиск</span>
-    </button>
-</div>
-
-<script>
-    function openSearch() {
-        window.location.href = '/';
-    }
-
-    function showRegisterForm() {
-        document.getElementById('register-form').style.display = 'block';
-        document.getElementById('login-form').style.display = 'none';
-    }
-
-    function showLoginForm() {
-        document.getElementById('register-form').style.display = 'none';
-        document.getElementById('login-form').style.display = 'block';
-    }
-
-    function logout() {
-        document.querySelector('.username').textContent = 'Пользователь'; // Сбрасываем имя пользователя на "Пользователь"
-        document.getElementById('logout-btn').style.display = 'none'; // Скрываем кнопку "Выйти из аккаунта"
-        document.getElementById('auth-buttons').style.display = 'block'; // Показываем кнопки "Зарегистрироваться" и "Войти"
-    }
-
-    // Функция для скрытия сообщения об ошибке через 5 секунд
-    function hideErrorMessage() {
-        document.getElementById('register-error').style.display = 'none';
-        document.getElementById('username-error-icon').style.display = 'none';
-        document.getElementById('password-error-icon').style.display = 'none';
-        document.getElementById('confirm-password-error-icon').style.display = 'none';
-        document.getElementById('login-username-error-icon').style.display = 'none';
-        document.getElementById('login-password-error-icon').style.display = 'none';
-        errorMessageShown = false;
-    }
-
-    var previousUsername = ""; // Переменная для хранения предыдущего значения логина
-    var errorMessageShown = false; // Переменная для отслеживания отображения сообщения об ошибке
-
-    document.getElementById('register-form-element').addEventListener('submit', function(event) {
-        event.preventDefault();
-            var formData = new FormData(this);
-        var currentUsername = formData.get('username'); // Получаем текущий логин из формы
-        var password = formData.get('password');
-        var confirmPassword = formData.get('confirm-password');
-
-        // Сброс состояния ошибок
-        document.getElementById('register-error').style.display = 'none';
-        document.getElementById('username-error-icon').style.display = 'none';
-        document.getElementById('password-error-icon').style.display = 'none';
-        document.getElementById('confirm-password-error-icon').style.display = 'none';
-
-        if (password !== confirmPassword) {
-            document.getElementById('register-error').textContent = 'Пароли не совпадают';
-            document.getElementById('register-error').style.display = 'block';
-            document.getElementById('password-error-icon').style.display = 'inline';
-            document.getElementById('confirm-password-error-icon').style.display = 'inline';
-            setTimeout(hideErrorMessage, 5000);
-            return;
+        function handleClick(event) {
+            event.preventDefault();
+            if (event.pointerType === 'mouse') {
+                score += 1;
+                updateScore();
+            }
         }
 
-        if (currentUsername === previousUsername && errorMessageShown) {
-            // Если текущий логин совпадает с предыдущим и сообщение об ошибке уже показано, ничего не делаем
-            return;
+        function handleTouch(event) {
+            event.preventDefault();
+            const touches = event.touches.length;
+            if (touches > 0 && touches <= 4) {
+                score += touches;
+                updateScore();
+            }
         }
 
-        fetch('{{ url_for("register") }}', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                document.getElementById('register-form').style.display = 'none';
-                document.getElementById('auth-buttons').style.display = 'none';
-                document.getElementById('logout-btn').style.display = 'block'; // Показываем кнопку "Выйти из аккаунта"
-                document.querySelector('.username').textContent = currentUsername; // Обновляем имя пользователя
-                alert('Регистрация прошла успешно!');
-            } else {
-                document.getElementById('register-error').textContent = 'Пользователь с таким логином уже существует'; // Выводим ошибку
-                document.getElementById('register-error').style.display = 'block'; // Показываем сообщение об ошибке
-                document.getElementById('username-error-icon').style.display = 'inline';
-                setTimeout(hideErrorMessage, 5000); // Скрыть сообщение об ошибке через 5 секунд
-                errorMessageShown = true; // Устанавливаем значение, указывающее на то, что сообщение об ошибке было показано
-                previousUsername = currentUsername; // Обновляем предыдущий логин
-            }
-        })
-        .catch(error => console.error('Error:', error));
-    });
+        function updateScore() {
+            document.getElementById('score').innerText = `Score: ${score}`;
+        }
 
-    // При каждом изменении логина сбрасываем флаг errorMessageShown в false
-    document.getElementById('register-username').addEventListener('input', function() {
-        errorMessageShown = false;
-    });
-
-    // Проверка логина при входе
-    document.getElementById('login-form-element').addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        var formData = new FormData(this);
-        var username = formData.get('username');
-        var password = formData.get('password');
-
-        // Сброс состояния ошибок
-        document.getElementById('login-error').style.display = 'none';
-        document.getElementById('login-username-error-icon').style.display = 'none';
-        document.getElementById('login-password-error-icon').style.display = 'none';
-
-        fetch('{{ url_for("login") }}', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                alert('Вход успешно выполнен!');
-                document.getElementById('login-form').style.display = 'none';
-                document.getElementById('auth-buttons').style.display = 'none';
-                document.getElementById('logout-btn').style.display = 'block'; // Показываем кнопку "Выйти из аккаунта"
-                document.querySelector('.username').textContent = username; // Обновляем имя пользователя
-            } else if (data.status === 'user_not_found') {
-                document.getElementById('login-error').textContent = 'Такого пользователя не существует';
-                document.getElementById('login-error').style.display = 'block';
-                document.getElementById('login-username-error-icon').style.display = 'inline';
-                setTimeout(hideErrorMessage, 5000); // Скрыть сообщение об ошибке через 5 секунд
-            } else if (data.status === 'wrong_password') {
-                document.getElementById('login-error').textContent = 'Неверный пароль';
-                document.getElementById('login-error').style.display = 'block';
-                document.getElementById('login-password-error-icon').style.display = 'inline';
-                setTimeout(hideErrorMessage, 5000); // Скрыть сообщение об ошибке через 5 секунд
-            }
-        })
-        .catch(error => console.error('Error:', error));
-    });
-</script>
-
+        document.getElementById('clicker').addEventListener('touchstart', handleTouch);
+    </script>
 </body>
 </html>

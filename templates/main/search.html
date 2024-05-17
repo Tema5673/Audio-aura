@@ -6,29 +6,45 @@
     <title>Главная страница</title>
     <link rel="stylesheet" href="static/css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"> <!-- Подключаем иконки Font Awesome -->
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+        }
 
+        .personal-area-button, .search-button {
+            display: flex;
+            align-items: center;
+        }
+
+        .personal-area-icon, .search-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 5px;
+        }
+
+        .icon-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 60px); /* Adjusted for the container height */
+        }
+
+        #clicker-coin {
+            width: 300px; /* Иконка в 3 раза больше */
+            height: 300px; /* Иконка в 3 раза больше */
+            cursor: pointer;
+        }
+
+        #score {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-
-<div class="search-bar">
-    <input type="text" class="search-input" placeholder="Поиск музыки...">
-    <i class="fas fa-search search-icon"></i>
-</div>
-
-<div class="music-controls" style="display:none;"> <!-- Скрыто по умолчанию -->
-    <div class="volume-controls">
-        <button id="muteButton" class="mute-button" onclick="toggleMute()">
-            <i id="muteIcon" class="fas fa-volume-up"></i>
-        </button>
-    </div>
-    <div class="slider-container">
-        <input type="range" id="timeSlider" class="slider-thumb" min="0" max="100" value="0" step="1" onchange="changeTime(this.value)">
-    </div>
-    <button id="playPauseButton" class="play-button" onclick="togglePlayPause()">
-        <i id="playPauseIcon" class="fas fa-play"></i>
-    </button>
-</div>
-
 
 <div class="container">
     <button class="personal-area-button" onclick="openPersonalArea()">
@@ -41,107 +57,41 @@
     </button>
 </div>
 
-<div class="popular-container">
-    <button id="popularButton" class="popular">
-        <span class="text">Популярное</span>
-    </button>
-    <button id="new" class="new">
-        <span class="text">Новинки</span>
-    </button>
+<div class="icon-container">
+    <div id="score">Счёт: 0</div>
+    <img id="clicker-coin" src="static/icons/bbe418cf-b300-491e-a939-1da65b804066-1.png" alt="Clicker Coin">
 </div>
-
-<div id="itemsContainer">
-    <div class="item" id="item1" data-track-url="static/Track/minelli-rampampam-mp3.mp3" onclick="toggleMusic(this)">
-        <img src="static/icons/rum-pum-pum_628cc5c3a8772.jpeg" id="image1">
-        <p class="song-name">Rampampam</p>
-        <p class="artist-name">Minelli</p>
-        <a href="static/Track/minelli-rampampam-mp3.mp3" target="_blank">
-            <img src="static/icons/icons8-скачать-100.png" class="download-icon">
-        </a>
-    </div>
-</div>
-
-<div id="personalAreaContainer"></div>
-
-<div data-la-block="e9d7ad0b-6bbd-4218-8c7c-f967e6288b91"></div>
 
 <script>
-    var audio = new Audio();
-    var playPauseButton = document.getElementById('playPauseButton');
-    var playPauseIcon = document.getElementById('playPauseIcon');
-    var timeSlider = document.getElementById('timeSlider');
-    var musicControls = document.querySelector('.music-controls');
-    var currentItem = null;
-
-    function togglePlayPause() {
-        if (audio.paused) {
-            audio.play();
-            playPauseIcon.classList.remove('fa-play');
-            playPauseIcon.classList.add('fa-pause');
-        } else {
-            audio.pause();
-            playPauseIcon.classList.remove('fa-pause');
-            playPauseIcon.classList.add('fa-play');
-        }
-    }
-
-    function changeTime(value) {
-        var newTime = (value / 100) * audio.duration;
-        audio.currentTime = newTime;
-    }
-
-    function updateSlider() {
-        var currentTime = audio.currentTime;
-        var duration = audio.duration;
-        var value = (currentTime / duration) * 100;
-        timeSlider.value = value;
-    }
+    let score = 0;
+    const scoreElement = document.getElementById('score');
+    const clickerCoin = document.getElementById('clicker-coin');
 
     function openPersonalArea() {
         window.location.href = '/personal_area';
     }
 
-    function toggleMute() {
-        if (audio.muted) {
-            audio.muted = false;
-            document.getElementById('muteIcon').classList.remove('fa-volume-off');
-            document.getElementById('muteIcon').classList.add('fa-volume-up');
-        } else {
-            audio.muted = true;
-            document.getElementById('muteIcon').classList.remove('fa-volume-up');
-            document.getElementById('muteIcon').classList.add('fa-volume-off');
-        }
+    function updateScore(points) {
+        score += points;
+        scoreElement.textContent = `Счёт: ${score}`;
     }
 
-    // Set up audio player
-    audio.volume = 0.5; // Initial volume
-
-    // Update slider as audio plays
-    audio.addEventListener('timeupdate', function() {
-        updateSlider();
+    clickerCoin.addEventListener('click', function() {
+        updateScore(1);
     });
 
-    function toggleMusic(item) {
-        if (currentItem === item) {
-            if (audio.paused) {
-                audio.play();
-                playPauseIcon.classList.remove('fa-play');
-                playPauseIcon.classList.add('fa-pause');
-            } else {
-                audio.pause();
-                playPauseIcon.classList.remove('fa-pause');
-                playPauseIcon.classList.add('fa-play');
-            }
-        } else {
-            currentItem = item;
-            audio.src = item.getAttribute('data-track-url');
-            audio.play();
-            playPauseIcon.classList.remove('fa-play');
-            playPauseIcon.classList.add('fa-pause');
-            musicControls.style.display = 'block'; // Показываем music-controls при включении музыки
-        }
-    }
+    let touchTimeout;
 
+    clickerCoin.addEventListener('touchstart', function(event) {
+        clearTimeout(touchTimeout);
+
+        touchTimeout = setTimeout(function() {
+            const touches = event.touches.length;
+            if (touches <= 4) {
+                updateScore(touches);
+            }
+        }, 200);
+    });
 </script>
 
 </body>
