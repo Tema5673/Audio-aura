@@ -6,6 +6,23 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Личный кабинет</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/personal_area.css') }}">
+    <style>
+        .error-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: red;
+            font-size: 18px;
+            display: none;
+        }
+        .input-wrapper {
+            position: relative;
+        }
+        .input-wrapper input {
+            padding-right: 30px;
+        }
+    </style>
 </head>
 <body>
 <div class="top-bar">
@@ -24,12 +41,21 @@
 <div id="register-form" class="auth-form" style="display:none;">
     <h2>Регистрация</h2>
     <form id="register-form-element">
-        <label for="register-username"></label>
-        <input type="text" id="register-username" name="username" placeholder="Логин" required>
-        <label for="register-password"></label>
-        <input type="password" id="register-password" name="password" placeholder="Пароль" required>
-        <label for="register-confirm-password"></label>
-        <input type="password" id="register-confirm-password" name="confirm-password" placeholder="Подтвердите пароль" required>
+        <div class="input-wrapper">
+            <label for="register-username"></label>
+            <input type="text" id="register-username" name="username" placeholder="Логин" required>
+            <span class="error-icon" id="username-error-icon">!</span>
+        </div>
+        <div class="input-wrapper">
+            <label for="register-password"></label>
+            <input type="password" id="register-password" name="password" placeholder="Пароль" required>
+            <span class="error-icon" id="password-error-icon">!</span>
+        </div>
+        <div class="input-wrapper">
+            <label for="register-confirm-password"></label>
+            <input type="password" id="register-confirm-password" name="confirm-password" placeholder="Подтвердите пароль" required>
+            <span class="error-icon" id="confirm-password-error-icon">!</span>
+        </div>
         <button type="submit">Продолжить</button>
         <span id="register-error" style="color: red; display: none;"></span> <!-- Показывает ошибку при регистрации -->
     </form>
@@ -38,10 +64,14 @@
 <div id="login-form" class="auth-form" style="display:none;">
     <h2>Вход</h2>
     <form id="login-form-element">
-        <label for="login-username"></label>
-        <input type="text" id="login-username" name="username" placeholder="Логин" required>
-        <label for="login-password"></label>
-        <input type="password" id="login-password" name="password" placeholder="Пароль" required>
+        <div class="input-wrapper">
+            <label for="login-username"></label>
+            <input type="text" id="login-username" name="username" placeholder="Логин" required>
+        </div>
+        <div class="input-wrapper">
+            <label for="login-password"></label>
+            <input type="password" id="login-password" name="password" placeholder="Пароль" required>
+        </div>
         <button type="submit">Продолжить</button>
         <span id="login-error" style="color: red; display: none;"></span> <!-- Показывает ошибку при входе -->
     </form>
@@ -86,6 +116,10 @@
     // Функция для скрытия сообщения об ошибке через 5 секунд
     function hideErrorMessage() {
         document.getElementById('register-error').style.display = 'none';
+        document.getElementById('username-error-icon').style.display = 'none';
+        document.getElementById('password-error-icon').style.display = 'none';
+        document.getElementById('confirm-password-error-icon').style.display = 'none';
+        errorMessageShown = false;
     }
 
     var previousUsername = ""; // Переменная для хранения предыдущего значения логина
@@ -102,6 +136,23 @@
 
         var formData = new FormData(this);
         var currentUsername = formData.get('username'); // Получаем текущий логин из формы
+        var password = formData.get('password');
+        var confirmPassword = formData.get('confirm-password');
+
+        // Сброс состояния ошибок
+        document.getElementById('register-error').style.display = 'none';
+        document.getElementById('username-error-icon').style.display = 'none';
+        document.getElementById('password-error-icon').style.display = 'none';
+        document.getElementById('confirm-password-error-icon').style.display = 'none';
+
+        if (password !== confirmPassword) {
+            document.getElementById('register-error').textContent = 'Пароли не совпадают';
+            document.getElementById('register-error').style.display = 'block';
+            document.getElementById('password-error-icon').style.display = 'inline';
+            document.getElementById('confirm-password-error-icon').style.display = 'inline';
+            setTimeout(hideErrorMessage, 5000);
+            return;
+        }
 
         if (currentUsername === previousUsername && errorMessageShown) {
             // Если текущий логин совпадает с предыдущим и сообщение об ошибке уже показано, ничего не делаем
@@ -123,6 +174,7 @@
             } else {
                 document.getElementById('register-error').textContent = 'Пользователь с таким логином уже существует'; // Выводим ошибку
                 document.getElementById('register-error').style.display = 'block'; // Показываем сообщение об ошибке
+                document.getElementById('username-error-icon').style.display = 'inline';
                 setTimeout(hideErrorMessage, 5000); // Скрыть сообщение об ошибке через 5 секунд
                 errorMessageShown = true; // Устанавливаем значение, указывающее на то, что сообщение об ошибке было показано
                 previousUsername = currentUsername; // Обновляем предыдущий логин
@@ -145,6 +197,7 @@
             event.preventDefault(); // Отменяем отправку формы
             document.getElementById('register-error').textContent = 'Пользователь с таким логином уже существует';
             document.getElementById('register-error').style.display = 'block';
+            document.getElementById('username-error-icon').style.display = 'inline';
             setTimeout(hideErrorMessage, 5000); // Скрыть сообщение об ошибке через 5 секунд
         }
     });
