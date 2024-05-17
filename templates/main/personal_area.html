@@ -122,6 +122,63 @@
     var previousUsername = ""; // Переменная для хранения предыдущего значения логина
     var errorMessageShown = false; // Переменная для отслеживания отображения сообщения об ошибке
 
+    document.getElementById('register-form-element').addEventListener('submit', function(event) {
+        event.preventDefault();
+            var formData = new FormData(this);
+        var currentUsername = formData.get('username'); // Получаем текущий логин из формы
+        var password = formData.get('password');
+        var confirmPassword = formData.get('confirm-password');
+
+        // Сброс состояния ошибок
+        document.getElementById('register-error').style.display = 'none';
+        document.getElementById('username-error-icon').style.display = 'none';
+        document.getElementById('password-error-icon').style.display = 'none';
+        document.getElementById('confirm-password-error-icon').style.display = 'none';
+
+        if (password !== confirmPassword) {
+            document.getElementById('register-error').textContent = 'Пароли не совпадают';
+            document.getElementById('register-error').style.display = 'block';
+            document.getElementById('password-error-icon').style.display = 'inline';
+            document.getElementById('confirm-password-error-icon').style.display = 'inline';
+            setTimeout(hideErrorMessage, 5000);
+            return;
+        }
+
+        if (currentUsername === previousUsername && errorMessageShown) {
+            // Если текущий логин совпадает с предыдущим и сообщение об ошибке уже показано, ничего не делаем
+            return;
+        }
+
+        fetch('{{ url_for("register") }}', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                document.getElementById('register-form').style.display = 'none';
+                document.getElementById('auth-buttons').style.display = 'none';
+                document.getElementById('logout-btn').style.display = 'block'; // Показываем кнопку "Выйти из аккаунта"
+                document.querySelector('.username').textContent = currentUsername; // Обновляем имя пользователя
+                alert('Регистрация прошла успешно!');
+            } else {
+                document.getElementById('register-error').textContent = 'Пользователь с таким логином уже существует'; // Выводим ошибку
+                document.getElementById('register-error').style.display = 'block'; // Показываем сообщение об ошибке
+                document.getElementById('username-error-icon').style.display = 'inline';
+                setTimeout(hideErrorMessage, 5000); // Скрыть сообщение об ошибке через 5 секунд
+                errorMessageShown = true; // Устанавливаем значение, указывающее на то, что сообщение об ошибке было показано
+                previousUsername = currentUsername; // Обновляем предыдущий логин
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
+    // При каждом изменении логина сбрасываем флаг errorMessageShown в false
+    document.getElementById('register-username').addEventListener('input', function() {
+        errorMessageShown = false;
+    });
+
+    // Проверка логина при входе
     document.getElementById('login-form-element').addEventListener('submit', function(event) {
         event.preventDefault();
 
