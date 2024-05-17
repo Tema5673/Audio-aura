@@ -50,13 +50,17 @@ def login():
     username = request.form['username']
     password = request.form['password']
 
-    user = User.query.filter_by(username=username, password=password).first()
+    user = User.query.filter_by(username=username).first()
     if user:
-        flash('Вход выполнен успешно!', 'success')
-        return redirect(url_for('personal_area'))
+        if user.password == password:
+            flash('Вход выполнен успешно!', 'success')
+            return jsonify({'status': 'success'}), 200
+        else:
+            flash('Неверный пароль!', 'error')
+            return jsonify({'status': 'wrong_password'}), 401
     else:
-        flash('Неверный логин или пароль!', 'error')
-        return redirect(url_for('personal_area'))
+        flash('Такого пользователя не существует!', 'error')
+        return jsonify({'status': 'user_not_found'}), 404
 
 @app.route('/logout')
 def logout():

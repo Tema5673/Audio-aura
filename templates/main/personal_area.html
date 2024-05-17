@@ -19,9 +19,6 @@
         .input-wrapper {
             position: relative;
         }
-        .input-wrapper input {
-            padding-right: 30px;
-        }
     </style>
 </head>
 <body>
@@ -67,10 +64,12 @@
         <div class="input-wrapper">
             <label for="login-username"></label>
             <input type="text" id="login-username" name="username" placeholder="Логин" required>
+            <span class="error-icon" id="login-username-error-icon">!</span>
         </div>
         <div class="input-wrapper">
             <label for="login-password"></label>
             <input type="password" id="login-password" name="password" placeholder="Пароль" required>
+            <span class="error-icon" id="login-password-error-icon">!</span>
         </div>
         <button type="submit">Продолжить</button>
         <span id="login-error" style="color: red; display: none;"></span> <!-- Показывает ошибку при входе -->
@@ -104,13 +103,9 @@
     }
 
     function logout() {
-        // Логика выхода из аккаунта
-
-        // Изменение отображения элементов
-        document.getElementById('auth-buttons').style.display = 'block';
-        document.getElementById('register-form').style.display = 'none';
-        document.getElementById('login-form').style.display = 'none';
-        document.getElementById('logout-btn').style.display = 'none'; // Скрытие кнопки "Выйти из аккаунта"
+        document.querySelector('.username').textContent = 'Пользователь'; // Сбрасываем имя пользователя на "Пользователь"
+        document.getElementById('logout-btn').style.display = 'none'; // Скрываем кнопку "Выйти из аккаунта"
+        document.getElementById('auth-buttons').style.display = 'block'; // Показываем кнопки "Зарегистрироваться" и "Войти"
     }
 
     // Функция для скрытия сообщения об ошибке через 5 секунд
@@ -119,17 +114,11 @@
         document.getElementById('username-error-icon').style.display = 'none';
         document.getElementById('password-error-icon').style.display = 'none';
         document.getElementById('confirm-password-error-icon').style.display = 'none';
-        errorMessageShown = false;
+        document.getElementById('login-username-error-icon').style.display = 'none';
+        document.getElementById('login-password-error-icon').style.display = 'none';
     }
 
     var previousUsername = ""; // Переменная для хранения предыдущего значения логина
-    var errorMessageShown = false; // Переменная для отслеживания отображения сообщения об ошибке
-
-    function logout() {
-        document.querySelector('.username').textContent = 'Пользователь'; // Сбрасываем имя пользователя на "Пользователь"
-        document.getElementById('logout-btn').style.display = 'none'; // Скрываем кнопку "Выйти из аккаунта"
-        document.getElementById('auth-buttons').style.display = 'block'; // Показываем кнопки "Зарегистрироваться" и "Войти"
-    }
 
     document.getElementById('register-form-element').addEventListener('submit', function(event) {
         event.preventDefault();
@@ -154,8 +143,8 @@
             return;
         }
 
-        if (currentUsername === previousUsername && errorMessageShown) {
-            // Если текущий логин совпадает с предыдущим и сообщение об ошибке уже показано, ничего не делаем
+        if (currentUsername === previousUsername) {
+            // Если текущий логин совпадает с предыдущим, ничего не делаем
             return;
         }
 
@@ -176,32 +165,53 @@
                 document.getElementById('register-error').style.display = 'block'; // Показываем сообщение об ошибке
                 document.getElementById('username-error-icon').style.display = 'inline';
                 setTimeout(hideErrorMessage, 5000); // Скрыть сообщение об ошибке через 5 секунд
-                errorMessageShown = true; // Устанавливаем значение, указывающее на то, что сообщение об ошибке было показано
-                previousUsername = currentUsername; // Обновляем предыдущий логин
             }
         })
         .catch(error => console.error('Error:', error));
     });
 
-    // При каждом изменении логина сбрасываем флаг errorMessageShown в false
+    // При каждом изменении логина сбрасываем предыдущий логин
     document.getElementById('register-username').addEventListener('input', function() {
-        errorMessageShown = false;
+        previousUsername = "";
     });
 
-    // Проверяем текущий логин при повторном нажатии кнопки "Продолжить" и отображаем сообщение об ошибке при необходимости
-    document.getElementById('register-form-element').addEventListener('submit', function(event) {
-        var formData = new FormData(this);
-        var currentUsername = formData.get('username');
+    // Проверка логина при входе
+    document.getElementById('login-form-element').addEventListener('submit', function(event) {
+        event.preventDefault();
 
-        if (currentUsername === previousUsername && errorMessageShown) {
-            event.preventDefault(); // Отменяем отправку формы
-            document.getElementById('register-error').textContent = 'Пользователь с таким логином уже существует';
-            document.getElementById('register-error').style.display = 'block';
-            document.getElementById('username-error-icon').style.display = 'inline';
-            setTimeout(hideErrorMessage, 5000); // Скрыть сообщение об ошибке через 5 секунд
-        }
+        var formData = new FormData(this);
+        var username = formData.get('username');
+        var password = formData.get('password');
+
+        // Сброс состояния ошибок
+        document.getElementById('login-error').style.display = 'none';
+        document.getElementById('login-username-error-icon').style.display = 'none';
+        document.getElementById('login-password-error-icon').style.display = 'none';
+
+        fetch('{{ url_for("login") }}', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert('Вход успешно выполнен!');
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('auth-buttons').style.display = 'none';
+                document.getElementById('logout-btn').style.display = 'block'; // Показываем кнопку "Выйти из аккаунта"
+                document.querySelector('.username').textContent = username; // Обновляем имя пользователя
+            } else {
+                document.getElementById('login-error').textContent = 'Неверный логин или пароль'; // Выводим ошибку
+                document.getElementById('login-error').style.display = 'block'; // Показываем сообщение об ошибке
+                document.getElementById('login-username-error-icon').style.display = 'inline';
+                document.getElementById('login-password-error-icon').style.display = 'inline';
+                setTimeout(hideErrorMessage, 5000); // Скрыть сообщение об ошибке через 5 секунд
+            }
+        })
+        .catch(error => console.error('Error:', error));
     });
 </script>
+
 
 </body>
 </html>
