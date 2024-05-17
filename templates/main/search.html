@@ -1,98 +1,63 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Главная страница</title>
-    <link rel="stylesheet" href="static/css/main.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"> <!-- Подключаем иконки Font Awesome -->
+    <title>Clicker</title>
     <style>
-        .container {
+        body {
+            background-color: #333;
             display: flex;
-            justify-content: space-between;
-            padding: 10px;
-        }
-
-        .personal-area-button, .search-button {
-            display: flex;
-            align-items: center;
-        }
-
-        .personal-area-icon, .search-icon {
-            width: 24px;
-            height: 24px;
-            margin-right: 5px;
-        }
-
-        .icon-container {
-            display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: calc(100vh - 60px); /* Adjusted for the container height */
+            height: 100vh;
+            margin: 0;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            flex-direction: column;
         }
-
-        #clicker-coin {
-            width: 300px; /* Иконка в 3 раза больше */
-            height: 300px; /* Иконка в 3 раза больше */
+        #clicker {
+            width: 100px;
+            height: 100px;
+            background-color: #fff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             cursor: pointer;
-        }
-
-        #score {
-            font-size: 24px;
-            margin-bottom: 20px;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
+    <div id="score">Score: 0</div>
+    <div id="clicker" onclick="handleClick(event)">Click Me</div>
+    <script>
+        let score = 0;
 
-<div class="container">
-    <button class="personal-area-button" onclick="openPersonalArea()">
-        <img src="static/icons/1674365337_3-31.png" class="personal-area-icon">
-        <span class="text">Профиль</span>
-    </button>
-    <button class="search-button">
-        <img src="static/icons/kisspng-computer-icons-clip-art-openclipart-magnifying-gla-5d31cfdb595331.9238955815635455633659.png" class="search-icon">
-        <span class="text">Поиск</span>
-    </button>
-</div>
-
-<div class="icon-container">
-    <div id="score">Счёт: 0</div>
-    <img id="clicker-coin" src="static/icons/bbe418cf-b300-491e-a939-1da65b804066-1.png" alt="Clicker Coin">
-</div>
-
-<script>
-    let score = 0;
-    const scoreElement = document.getElementById('score');
-    const clickerCoin = document.getElementById('clicker-coin');
-
-    function openPersonalArea() {
-        window.location.href = '/personal_area';
-    }
-
-    function updateScore(points) {
-        score += points;
-        scoreElement.textContent = `Счёт: ${score}`;
-    }
-
-    clickerCoin.addEventListener('click', function() {
-        updateScore(1);
-    });
-
-    let touchTimeout;
-
-    clickerCoin.addEventListener('touchstart', function(event) {
-        clearTimeout(touchTimeout);
-
-        touchTimeout = setTimeout(function() {
-            const touches = event.touches.length;
-            if (touches <= 4) {
-                updateScore(touches);
+        function handleClick(event) {
+            event.preventDefault();
+            if (event.pointerType === 'mouse') {
+                score += 1;
+                updateScore();
             }
-        }, 200);
-    });
-</script>
+        }
 
+        function handleTouch(event) {
+            event.preventDefault();
+            const touches = event.touches.length;
+            if (touches > 0 && touches <= 4) {
+                score += touches;
+                updateScore();
+            }
+        }
+
+        function updateScore() {
+            document.getElementById('score').innerText = `Score: ${score}`;
+        }
+
+        document.getElementById('clicker').addEventListener('touchstart', handleTouch);
+    </script>
 </body>
 </html>
